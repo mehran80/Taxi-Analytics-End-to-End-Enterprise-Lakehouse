@@ -77,7 +77,7 @@
 											"source": {
 												"type": "AzureSqlSource",
 												"sqlReaderQuery": {
-													"value": "SELECT CHANGE_TRACKING_CURRENT_VERSION AS CurrentVersion",
+													"value": "SELECT CHANGE_TRACKING_CURRENT_VERSION() AS CurrentVersion;",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00",
@@ -112,7 +112,7 @@
 											"source": {
 												"type": "AzureSqlSource",
 												"sqlReaderQuery": {
-													"value": "SELECT t.* FROM [@{item().SourceSchema}].[@{item().SourceTableName}] AS t\n    INNER JOIN CHANGETABLE(CHNAGES[@{item().SourceSchema}].[@{item().SourceTableName}], @{item().LastChangeVersion}) AS CT\n    ON t.[@{item().WatermarkColumn}] = CT.[@{item().WatermarkColumn}]",
+													"value": "SELECT t.* FROM [@{item().SourceSchema}].[@{item().SourceTableName}] AS t\n    INNER JOIN CHANGETABLE(CHANGES [@{item().SourceSchema}].[@{item().SourceTableName}], @{item().LastChangeVersion}) AS CT\n    ON t.[@{item().WatermarkColumn}] = CT.[@{item().WatermarkColumn}]",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00",
@@ -216,7 +216,7 @@
 											"source": {
 												"type": "AzureSqlSource",
 												"sqlReaderQuery": {
-													"value": "@concat('SELECT * [',item().SourceSchema,'].[',item().SourceTableName,']')",
+													"value": "SELECT * FROM [@{item().SourceSchema}].[@{item().SourceTableName}]",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00",
