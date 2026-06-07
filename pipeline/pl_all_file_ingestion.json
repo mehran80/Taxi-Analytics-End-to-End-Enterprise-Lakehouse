@@ -1,0 +1,280 @@
+{
+	"name": "pl_all_file_ingestion",
+	"properties": {
+		"activities": [
+			{
+				"name": "LKP_Read_MetaData",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT * FROM control.IngestionMetaData WHERE IsActive = 1",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_source_sql",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "FRL_Process_Tables",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LKP_Read_MetaData",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LKP_Read_MetaData').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "If Check_Ingestion_type",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(item().WatermarkColumn, json('null') )",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "LKP_Get_Current_Version",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "SELECT CHANGE_TRACKING_CURRENT_VERSION AS CurrentVersion",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "ds_source_sql",
+												"type": "DatasetReference"
+											}
+										}
+									},
+									{
+										"name": "CPY_Incremental_Bronze",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "LKP_Get_Current_Version",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "SELECT t.* FROM [@{item().SourceSchema}].[@{item().SourceTableName}] AS t\n    INNER JOIN CHANGETABLE(CHNAGES[@{item().SourceSchema}].[@{item().SourceTableName}], @{item().LastChangeVersion}) AS CT\n    ON t.[@{item().WatermarkColumn}] = CT.[@{item().WatermarkColumn}]",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "DelimitedTextSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextWriteSettings",
+													"quoteAllText": true,
+													"fileExtension": ".txt"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_source_sql",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_bronze_csv",
+												"type": "DatasetReference",
+												"parameters": {
+													"p_folder_name": {
+														"value": "@concat('dareem_app/',item().TargetFolderName, '/', formatDateTime(utcNow(),'yyyy/MM/dd'))",
+														"type": "Expression"
+													},
+													"p_file_name": {
+														"value": "@concat(item().SourceTableName, '_', formatDateTime(utcNow(),'yyyy/MM/dd'))",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "SCR_Update_Metadata_Version",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "CPY_Incremental_Bronze",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "AzureSqlDatabase",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "NonQuery",
+													"text": {
+														"value": "UPDATE control.IngestionMetaData\nSET LastChangeVersion = @{activity('LKP_Get_Current_Version').output.firstRow.CurrentVersion}\nWHERE SourceSchema = '@{item().SourceSchema}'\n    AND SourceTableName = '@{item().SourceTableName}'",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "CPY_Full_Load_Bronze",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "@concat('SELECT * [',item().SourceSchema,'].[',item().SourceTableName,']')",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "DelimitedTextSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextWriteSettings",
+													"quoteAllText": true,
+													"fileExtension": ".txt"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_source_sql",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ds_bronze_csv",
+												"type": "DatasetReference",
+												"parameters": {
+													"p_folder_name": {
+														"value": "@concat('dream_app/', item().TargetFolderName, '/', formatDateTime(utcNow(), 'yyyy/MM/dd'))",
+														"type": "Expression"
+													},
+													"p_file_name": {
+														"value": "@concat(item().SourceTableName, '_', formatDateTime(utcNow(), 'yyyyMMdd_HHmmss'), '.csv')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-06-07T16:33:52Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
