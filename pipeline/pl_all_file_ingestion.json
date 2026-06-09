@@ -268,6 +268,45 @@
 									}
 								]
 							}
+						},
+						{
+							"name": "nb_STG_Bronze_to_Silver_Generic",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "If Check_Ingestion_type",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/mehranali8023@hotmail.com/STG_Bronze_to_Silver_Generic",
+								"baseParameters": {
+									"p_source_folder": "bronze",
+									"p_target_table": {
+										"value": "@item().SourceTableName",
+										"type": "Expression"
+									},
+									"p_date_path": "@formatDateTime(pipeline().TriggerTime, 'yyyy/MM/dd')",
+									"p_primary_key": {
+										"value": "@item().PrimaryKeyColumn",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_adf_databricks",
+								"type": "LinkedServiceReference"
+							}
 						}
 					]
 				}
