@@ -15,9 +15,6 @@
 			},
 			"newClusterNodeType": "Standard_D4s_v3",
 			"newClusterNumOfWorker": "0",
-			"newClusterSparkConf": {
-				"spark.databricks.cluster.profile": "singleNode"
-			},
 			"newClusterSparkEnvVars": {
 				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
 			},
