@@ -16,12 +16,7 @@
 			"newClusterNodeType": "Standard_D4s_v3",
 			"newClusterNumOfWorker": "0",
 			"newClusterSparkConf": {
-				"spark.databricks.cluster.profile": "singleNode",
-				"fs.azure.account.auth.type.adlsgen2dreamprod.dfs.core.windows.net\tOAuth": "OAuth",
-				"fs.azure.account.oauth.provider.type.adlsgen2dreamprod.dfs.core.windows.net": "org.apache.hadoop.fs.azure.bfs.oauth2.ClientCredentialProvider",
-				"fs.azure.account.oauth2.client.id.adlsgen2dreamprod.dfs.core.windows.net": "{{secrets/akv-scope/client-id}}",
-				"fs.azure.account.oauth2.client.secret.adlsgen2dreamprod.dfs.core.windows.net": "{{secrets/akv-scope/client-secret}}",
-				"fs.azure.account.oauth2.client.endpoint.adlsgen2dreamprod.dfs.core.windows.net": "https://login.microsoftonline.com/{{secrets/akv-scope/tenant-id}}/oauth2/token"
+				"spark.databricks.cluster.profile": "singleNode"
 			},
 			"newClusterSparkEnvVars": {
 				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
