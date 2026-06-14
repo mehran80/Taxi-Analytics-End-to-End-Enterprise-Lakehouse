@@ -151,7 +151,7 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"p_folder_name": {
-														"value": "@concat('dareem_app/',item().TargetFolderName, '/', formatDateTime(utcNow(),'yyyy/MM/dd'))",
+														"value": "@concat('dream_app/',item().TargetFolderName, '/', formatDateTime(utcNow(),'yyyy/MM/dd'))",
 														"type": "Expression"
 													},
 													"p_file_name": {
