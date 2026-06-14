@@ -468,6 +468,10 @@
 							"userProperties": [],
 							"typeProperties": {
 								"notebookPath": "/Workspace/Users/mehranali8023@hotmail.com/gold_presentation_layer"
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_adf_databricks",
+								"type": "LinkedServiceReference"
 							}
 						}
 					]
