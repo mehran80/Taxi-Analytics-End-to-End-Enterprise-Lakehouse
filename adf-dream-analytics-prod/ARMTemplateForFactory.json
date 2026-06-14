@@ -19,10 +19,6 @@
 			"type": "string",
 			"defaultValue": "books"
 		},
-		"ls_adf_databricks_properties_typeProperties_existingClusterId": {
-			"type": "string",
-			"defaultValue": "0608-101619-ylsz6f1p"
-		},
 		"ls_adf_keyvault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://akv-dream-analytics-prod.vault.azure.net/"
@@ -357,164 +353,164 @@
 										"referenceName": "ls_adf_databricks",
 										"type": "LinkedServiceReference"
 									}
-								},
-								{
-									"name": "nb_silver_to Gold_customers",
-									"type": "DatabricksNotebook",
-									"dependsOn": [
-										{
-											"activity": "nb_STG_Bronze_to_Silver_Generic",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"notebookPath": {
-											"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_customers",
-											"type": "Expression"
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "ls_adf_databricks",
-										"type": "LinkedServiceReference"
-									}
-								},
-								{
-									"name": "nb_silver_to Gold_drivers",
-									"type": "DatabricksNotebook",
-									"dependsOn": [
-										{
-											"activity": "nb_STG_Bronze_to_Silver_Generic",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"notebookPath": {
-											"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_drivers",
-											"type": "Expression"
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "ls_adf_databricks",
-										"type": "LinkedServiceReference"
-									}
-								},
-								{
-									"name": "nb_silver_to Gold_locations",
-									"type": "DatabricksNotebook",
-									"dependsOn": [
-										{
-											"activity": "nb_STG_Bronze_to_Silver_Generic",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"notebookPath": "/Workspace/Users/mehranali8023@hotmail.com/gold_dim_locations"
-									},
-									"linkedServiceName": {
-										"referenceName": "ls_adf_databricks",
-										"type": "LinkedServiceReference"
-									}
-								},
-								{
-									"name": "nb_silver_to Gold_trips",
-									"type": "DatabricksNotebook",
-									"dependsOn": [
-										{
-											"activity": "nb_silver_to Gold_drivers",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										},
-										{
-											"activity": "nb_silver_to Gold_customers",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										},
-										{
-											"activity": "nb_silver_to Gold_locations",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"notebookPath": {
-											"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_fact_trips",
-											"type": "Expression"
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "ls_adf_databricks",
-										"type": "LinkedServiceReference"
-									}
-								},
-								{
-									"name": "nb_star_schema_to_presentation",
-									"type": "DatabricksNotebook",
-									"dependsOn": [
-										{
-											"activity": "nb_silver_to Gold_trips",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"notebookPath": "/Workspace/Users/mehranali8023@hotmail.com/gold_presentation_layer"
-									},
-									"linkedServiceName": {
-										"referenceName": "ls_adf_databricks",
-										"type": "LinkedServiceReference"
-									}
 								}
 							]
+						}
+					},
+					{
+						"name": "nb_silver_to Gold_customers",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "FRL_Process_Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": {
+								"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_customers",
+								"type": "Expression"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_adf_databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "nb_silver_to Gold_drivers",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "FRL_Process_Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": {
+								"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_drivers",
+								"type": "Expression"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_adf_databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "nb_silver_to Gold_locations",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "FRL_Process_Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Workspace/Users/mehranali8023@hotmail.com/gold_dim_locations"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_adf_databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "nb_silver_to Gold_trips",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "nb_silver_to Gold_customers",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "nb_silver_to Gold_drivers",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "nb_silver_to Gold_locations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": {
+								"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_fact_trips",
+								"type": "Expression"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_adf_databricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "nb_star_schema_to_presentation",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "nb_silver_to Gold_trips",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Workspace/Users/mehranali8023@hotmail.com/gold_presentation_layer"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_adf_databricks",
+							"type": "LinkedServiceReference"
 						}
 					}
 				],
@@ -623,6 +619,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_adf_keyvault')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_adf_keyvault_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_adf_databricks')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -639,25 +648,20 @@
 						},
 						"secretName": "databricks-access-token"
 					},
-					"existingClusterId": "[parameters('ls_adf_databricks_properties_typeProperties_existingClusterId')]"
+					"newClusterNodeType": "Standard_D4s_v3",
+					"newClusterNumOfWorker": "0",
+					"newClusterSparkEnvVars": {
+						"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+					},
+					"newClusterVersion": "14.3.x-scala2.12",
+					"clusterOption": "Fixed",
+					"newClusterInitScripts": [],
+					"dataSecurityMode": "SINGLE_USER"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adf_keyvault')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_adf_keyvault')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureKeyVault",
-				"typeProperties": {
-					"baseUrl": "[parameters('ls_adf_keyvault_properties_typeProperties_baseUrl')]"
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }

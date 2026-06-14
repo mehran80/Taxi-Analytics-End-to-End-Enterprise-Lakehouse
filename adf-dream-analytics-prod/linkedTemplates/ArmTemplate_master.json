@@ -19,10 +19,6 @@
 			"type": "string",
 			"defaultValue": "books"
 		},
-		"ls_adf_databricks_properties_typeProperties_existingClusterId": {
-			"type": "string",
-			"defaultValue": "0608-101619-ylsz6f1p"
-		},
 		"ls_adf_keyvault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://akv-dream-analytics-prod.vault.azure.net/"
@@ -65,9 +61,6 @@
 					},
 					"ls_adf_keyvault_properties_typeProperties_baseUrl": {
 						"value": "[parameters('ls_adf_keyvault_properties_typeProperties_baseUrl')]"
-					},
-					"ls_adf_databricks_properties_typeProperties_existingClusterId": {
-						"value": "[parameters('ls_adf_databricks_properties_typeProperties_existingClusterId')]"
 					}
 				}
 			},

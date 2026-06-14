@@ -14,9 +14,6 @@
 		"AzureSqlDatabase_properties_typeProperties_database": {
 			"value": "books"
 		},
-		"ls_adf_databricks_properties_typeProperties_existingClusterId": {
-			"value": "0608-101619-ylsz6f1p"
-		},
 		"ls_adf_keyvault_properties_typeProperties_baseUrl": {
 			"value": "https://akv-dream-analytics-prod.vault.azure.net/"
 		}
