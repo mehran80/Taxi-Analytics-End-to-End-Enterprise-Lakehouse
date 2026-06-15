@@ -307,7 +307,7 @@
 										"type": "Expression"
 									},
 									"p_date_path": {
-										"value": "@formatDateTime(pipeline().TriggerTime, 'yyyy/MM/dd')",
+										"value": "@variables('v_ingestion_date')",
 										"type": "Expression"
 									},
 									"p_primary_key": {
@@ -315,7 +315,7 @@
 										"type": "Expression"
 									},
 									"p_file_name": {
-										"value": "@variables('v_ingestion_date')",
+										"value": "@item().SourceTableName",
 										"type": "Expression"
 									}
 								}
@@ -408,7 +408,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Workspace/Users/mehranali8023@hotmail.com/gold_dim_locations"
+					"notebookPath": "/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_locations"
 				},
 				"linkedServiceName": {
 					"referenceName": "ls_adf_databricks",
@@ -477,7 +477,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Workspace/Users/mehranali8023@hotmail.com/gold_presentation_layer"
+					"notebookPath": "/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/03_reporting/gold_presentation_layer"
 				},
 				"linkedServiceName": {
 					"referenceName": "ls_adf_databricks",
