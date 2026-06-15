@@ -5,7 +5,14 @@
 			{
 				"name": "LKP_Read_MetaData",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "SET_Ingestion_Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -151,7 +158,7 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"p_folder_name": {
-														"value": "@concat('dream_app/',item().TargetFolderName, '/', formatDateTime(utcNow(),'yyyy/MM/dd'))",
+														"value": "@concat('dream_app/',item().TargetFolderName, '/', \nvariables('v_ingestion_date'))",
 														"type": "Expression"
 													},
 													"p_file_name": {
@@ -255,7 +262,7 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"p_folder_name": {
-														"value": "@concat('dream_app/', item().TargetFolderName, '/', formatDateTime(utcNow(), 'yyyy/MM/dd'))",
+														"value": "@concat('dream_app/', item().TargetFolderName, '/',\r\nvariables('v_ingestion_date'))",
 														"type": "Expression"
 													},
 													"p_file_name": {
@@ -272,6 +279,8 @@
 						{
 							"name": "nb_STG_Bronze_to_Silver_Generic",
 							"type": "DatabricksNotebook",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "If Check_Ingestion_type",
@@ -308,7 +317,7 @@
 										"type": "Expression"
 									},
 									"p_file_name": {
-										"value": "@item().SourceTableName",
+										"value": "@variables('v_ingestion_date')",
 										"type": "Expression"
 									}
 								}
@@ -476,8 +485,30 @@
 					"referenceName": "ls_adf_databricks",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "SET_Ingestion_Date",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_ingestion_date",
+					"value": {
+						"value": "@formatDateTime(utcNow(), 'yyyy/MM/dd')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"v_ingestion_date": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2026-06-07T16:33:52Z"
 	},
