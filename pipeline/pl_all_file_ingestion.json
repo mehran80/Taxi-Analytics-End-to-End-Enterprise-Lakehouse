@@ -500,6 +500,61 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "WEB_Send_Failure_Email",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "FRL_Process_Tables",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "nb_silver_to Gold_locations",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "nb_silver_to Gold_drivers",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "nb_silver_to Gold_customers",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "nb_silver_to Gold_trips",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "nb_star_schema_to_presentation",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-22.uaenorth.logic.azure.com:443/workflows/55a65ea19e23454f8e388540abdcb00a/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=oag1ZlN_Evrp-qqwRUPepa62ilkCscFCGdDz3Mwl83E",
+					"body": "{\n    \"PipelineName\": \"@{pipeline().Pipeline}\",\n    \"RunId\": \"@{pipeline().RunId}\",\n    \"ErrorMessage\": \"Pipeline failed during the execution of loop or gold layers. Check ADF Monitor logs.\"\n}\n``` [10]"
+				}
 			}
 		],
 		"variables": {
