@@ -1,0 +1,24 @@
+{
+	"name": "trg_daily_ingestion_06am",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_all_file_ingestion",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 1,
+				"startTime": "2026-06-16T00:25:00",
+				"timeZone": "Pakistan Standard Time"
+			}
+		}
+	}
+}
