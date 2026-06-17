@@ -162,7 +162,7 @@
 														"type": "Expression"
 													},
 													"p_file_name": {
-														"value": "@concat(item().SourceTableName, '_', formatDateTime(utcNow(), 'yyyyMMdd_HHmmss'),'.csv')",
+														"value": "@concat(toLower(item().SourceTableName), '_', formatDateTime(utcNow(), 'yyyyMMdd_HHmmss'),'.csv')",
 														"type": "Expression"
 													}
 												}
@@ -266,7 +266,7 @@
 														"type": "Expression"
 													},
 													"p_file_name": {
-														"value": "@concat(item().SourceTableName, '_', formatDateTime(utcNow(), 'yyyyMMdd_HHmmss'), '.csv')",
+														"value": "@concat(toLower(item().SourceTableName), '_', formatDateTime(utcNow(), 'yyyyMMdd_HHmmss'), '.csv')",
 														"type": "Expression"
 													}
 												}
@@ -315,7 +315,7 @@
 										"type": "Expression"
 									},
 									"p_file_name": {
-										"value": "@item().SourceTableName",
+										"value": "@toLower(item().SourceTableName)",
 										"type": "Expression"
 									}
 								}
@@ -553,7 +553,10 @@
 				"typeProperties": {
 					"method": "POST",
 					"url": "https://prod-22.uaenorth.logic.azure.com:443/workflows/55a65ea19e23454f8e388540abdcb00a/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=oag1ZlN_Evrp-qqwRUPepa62ilkCscFCGdDz3Mwl83E",
-					"body": "{\n    \"PipelineName\": \"@{pipeline().Pipeline}\",\n    \"RunId\": \"@{pipeline().RunId}\",\n    \"ErrorMessage\": \"Pipeline failed during the execution of loop or gold layers. Check ADF Monitor logs.\"\n}\n``` [10]"
+					"body": {
+						"value": "{\n    \"PipelineName\": \"@{pipeline().Pipeline}\",\n    \"RunId\": \"@{pipeline().RunId}\",\n    \"ErrorMessage\": \"Pipeline failed during the execution of loop or gold layers. Check ADF Monitor logs.\"\n}\n``` [10]",
+						"type": "Expression"
+					}
 				}
 			}
 		],
