@@ -1,0 +1,15 @@
+{
+	"name": "adf-dream-analytics-prod2",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "51ba5427-fed1-4e23-add0-967cf16030c0",
+		"tenantId": "c09d6185-70c7-475c-8890-415c02b93409"
+	}
+}
