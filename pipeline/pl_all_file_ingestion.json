@@ -25,7 +25,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "SELECT * FROM control.IngestionMetaData WHERE IsActive = 1",
+							"value": "SELECT * FROM control.IngestionMetadata WHERE IsActive = 1",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -297,7 +297,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"notebookPath": {
-									"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/01_silver/STG_Bronze_to_Silver_Generic",
+									"value": "/Workspace/Users/mehranalibaloch8023@outlook.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/01_silver/STG_Bronze_to_Silver_Generic",
 									"type": "Expression"
 								},
 								"baseParameters": {
@@ -349,7 +349,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebookPath": {
-						"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_customers",
+						"value": "/Workspace/Users/mehranalibaloch8023@outlook.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_customers",
 						"type": "Expression"
 					}
 				},
@@ -379,7 +379,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebookPath": {
-						"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_drivers",
+						"value": "/Workspace/Users/mehranalibaloch8023@outlook.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_drivers",
 						"type": "Expression"
 					}
 				},
@@ -408,7 +408,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_locations"
+					"notebookPath": {
+						"value": "/Workspace/Users/mehranalibaloch8023@outlook.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_dim_locations",
+						"type": "Expression"
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "ls_adf_databricks",
@@ -448,7 +451,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebookPath": {
-						"value": "/Workspace/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_fact_trips",
+						"value": "/Workspace/Users/mehranalibaloch8023@outlook.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/02_gold/gold_fact_trips",
 						"type": "Expression"
 					}
 				},
@@ -477,7 +480,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/mehranali8023@hotmail.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/03_reporting/gold_presentation_layer"
+					"notebookPath": {
+						"value": "/Workspace/Users/mehranalibaloch8023@outlook.com/Taxi-Analytics-End-to-End-Enterprise-Lakehouse/databricks/03_reporting/gold_presentation_layer",
+						"type": "Expression"
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "ls_adf_databricks",
@@ -504,6 +510,8 @@
 			{
 				"name": "WEB_Send_Failure_Email",
 				"type": "WebActivity",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "FRL_Process_Tables",
