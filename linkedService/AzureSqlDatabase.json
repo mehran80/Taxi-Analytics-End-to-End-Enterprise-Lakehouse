@@ -1,15 +1,15 @@
 {
 	"name": "AzureSqlDatabase",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "AzureSqlDatabase",
 		"typeProperties": {
-			"server": "sql-server-dream-prod.database.windows.net",
+			"server": "adl-dream-analyst-prod-server.database.windows.net",
 			"database": "books",
 			"encrypt": "mandatory",
 			"trustServerCertificate": true,
 			"authenticationType": "SystemAssignedManagedIdentity"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }

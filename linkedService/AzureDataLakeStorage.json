@@ -1,11 +1,11 @@
 {
 	"name": "AzureDataLakeStorage",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://adlsgen2dreamprod.dfs.core.windows.net/"
+			"url": "https://adlsgen2dreamprod2.dfs.core.windows.net/"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
