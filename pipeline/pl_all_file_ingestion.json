@@ -222,10 +222,7 @@
 										"typeProperties": {
 											"source": {
 												"type": "AzureSqlSource",
-												"sqlReaderQuery": {
-													"value": "SELECT * FROM [@{item().SourceSchema}].[@{item().SourceTableName}]",
-													"type": "Expression"
-												},
+												"sqlReaderQuery": "SELECT * FROM [@{item().SourceSchema}].[@{item().SourceTableName}]",
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
