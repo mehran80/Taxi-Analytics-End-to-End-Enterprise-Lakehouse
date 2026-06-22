@@ -222,7 +222,10 @@
 										"typeProperties": {
 											"source": {
 												"type": "AzureSqlSource",
-												"sqlReaderQuery": "SELECT * FROM [@{item().SourceSchema}].[@{item().SourceTableName}]",
+												"sqlReaderQuery": {
+													"value": "SELECT * FROM [@{item().SourceSchema}].[@{item().SourceTableName}]",
+													"type": "Expression"
+												},
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
@@ -489,6 +492,7 @@
 			},
 			{
 				"name": "SET_Ingestion_Date",
+				"description": "a",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
